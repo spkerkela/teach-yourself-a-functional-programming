@@ -12,7 +12,27 @@ object ProjectEuler {
    * By considering the terms in the Fibonacci sequence whose values do not
    * exceed four million, find the sum of the even-valued terms.
    */
-  def problem2(): Int = ???
+
+
+
+
+  def problem2(): Int = {
+    def fib(n:Int) :Int =  n match {
+      case 0 | 1 => n
+      case _ => fib(n-1) + fib(n-2)
+    }
+
+    def acceptable(n :Int) = {
+      n < 4000000 && n % 2 == 0
+    }
+
+    def nfibs(n :Int) = {
+      Range(1,n).toList.map(fib)
+    }
+
+    nfibs(40).filter((x) => acceptable(x)).reduce((x:Int, xs:Int) => x + xs)
+  }
+
 
   /*
    * Largest palindrome product
