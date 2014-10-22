@@ -1,7 +1,7 @@
 *~
 assignment/target
 assignment/project
-
+.idea
 add_underscore.js
 install.sh
 assignment/src/main/main.iml

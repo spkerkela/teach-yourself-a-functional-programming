@@ -43,7 +43,35 @@ object ProjectEuler {
    * Find the largest palindrome made from the product of two 3-digit numbers.
    *
    */
-  def problem4(): Int = ???
+  def problem4(): Int = {
+    def isPalindrome(n :Int) :Boolean = {
+      val numAsCharList = n.toString.toList
+      recursion(numAsCharList)
+    }
+
+    def dropHeads[A](list :List[A]) :List[A] = {
+      list.tail.dropRight(1)
+    }
+
+    // Looks nasty, I blame sucking at Scala, maybe pattern matching would work?
+    def recursion(list :List[Char]) :Boolean = {
+      if(list.isEmpty)
+        false
+      else if (list.length == 1)
+        true
+      else if(list.head == list.last && list.length == 2)
+        true
+      else if (list.head == list.last)
+        recursion(dropHeads(list))
+      else
+        false
+    }
+
+    // These two steps could be optimized but it runs in decent time already (< 1 second on my macbook pr0)
+    val numbersToTest = Range(100,999).toList.reverse
+    numbersToTest.map((x) => numbersToTest.map((y) => x * y)).flatten.filter(isPalindrome).max
+
+  }
 
   /*
    * Special Pythagorean triplet
