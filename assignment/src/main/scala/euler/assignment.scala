@@ -123,7 +123,32 @@ object ProjectEuler {
    * Find the maximum total from top to bottom of the given triangle with 15
    * rows:
    */
-  def problem18(triangle: List[List[Int]]): Int = ???
+  def problem18(triangle: List[List[Int]]): Int = {
+
+    // Start from the bottom row of the triangle
+
+    def recursion(list :List[List[Int]]) :List[List[Int]] = {
+      if(list.length == 1)
+        list
+      else {
+
+        // Take the row above the current row, and create a new row
+        // The new row should have each element mapped as the maximum of it + it's two lower neighbours
+
+        val recalculatedRow = calculateRow(list.head, list.tail.head)
+        recursion(recalculatedRow :: list.tail.tail)
+      }
+    }
+
+    def calculateRow(upperList :List[Int], lowerList :List[Int]) :List[Int] = {
+
+      // For loop wannabe, I needed the i to acces spesific points of the list
+      List.range(0, lowerList.length).map((i) => lowerList(i) + Math.max(upperList(i), upperList(i+1)))
+    }
+
+    recursion(triangle.reverse).flatten.head
+
+   }
 
   /*
    * Maximum path sum II
@@ -147,5 +172,5 @@ object ProjectEuler {
    * would take over twenty billion years to check them all. There is an
    * efficient algorithm to solve it. ;o)
    */
-  def problem67(triangle: List[List[Int]]): Int = ???
+  def problem67(triangle: List[List[Int]]): Int = problem18(triangle) // This felt good :D
 }
