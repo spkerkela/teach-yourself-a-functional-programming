@@ -13,9 +13,6 @@ object ProjectEuler {
    * exceed four million, find the sum of the even-valued terms.
    */
 
-
-
-
   def problem2(): Int = {
     def fib(n:Int) :Int =  n match {
       case 0 | 1 => n
@@ -33,7 +30,6 @@ object ProjectEuler {
     nfibs(40).filter((x) => acceptable(x)).reduce((x:Int, xs:Int) => x + xs)
   }
 
-
   /*
    * Largest palindrome product
    *
@@ -43,6 +39,7 @@ object ProjectEuler {
    * Find the largest palindrome made from the product of two 3-digit numbers.
    *
    */
+
   def problem4(): Int = {
     def isPalindrome(n :Int) :Boolean = {
       val numAsCharList = n.toString.toList
@@ -84,7 +81,30 @@ object ProjectEuler {
    * There exists exactly one Pythagorean triplet for which a + b + c = 1000.
    * Find the product abc.
    */
-  def problem9(): Int = ???
+  def problem9(): Int = {
+    def isPytagoreanTriplet(a :Int, b :Int, c :Int) :Boolean = {
+      if(a > b)
+        false
+      else if(b > c)
+        false
+      else
+        a * a + b * b == c * c
+    }
+
+    def isSpecial(a :Int, b:Int, c:Int) :Boolean = {
+      a + b + c == 1000 && isPytagoreanTriplet(a,b,c)
+    }
+
+    // First create a list of tuples like (a,b) where a < b
+    val tuples = List.range(1,500).map((x) => List.range(1,500).map((y) => (x,y))).flatten.filter((t) => t._1 < t._2)
+
+    // Then calculate c for each tuple created above and test if it's special
+    // Take the head of the list generated this way. We know there is only one result, the head.
+    val abc = tuples.map((t) => (t._1, t._2, Math.sqrt((t._1 * t._1) + (t._2 * t._2)).toInt)).filter((x) => isSpecial(x._1, x._2, x._3)).head
+
+    // return the product of the created tuple
+    abc._1 * abc._2 * abc._3
+  }
 
 
   /*
