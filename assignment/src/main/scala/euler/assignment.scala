@@ -143,6 +143,11 @@ object ProjectEuler {
     def calculateRow(upperList :List[Int], lowerList :List[Int]) :List[Int] = {
 
       // For loop wannabe, I needed the i to acces spesific points of the list
+      // Because the triangle is reversed, "upperList" here is the larger list
+
+      // upperList:   01, 02, 03, 04
+      // lowerList:     05, 06, 07
+      
       List.range(0, lowerList.length).map((i) => lowerList(i) + Math.max(upperList(i), upperList(i+1)))
     }
 
