@@ -1,38 +1,46 @@
 object HigherOrderFunctions {
 
     // returns a function that increments a given argument with a predefined amount
-    def plus(x:Int):(Int => Int) = (y:Int) => ???
+    def plus(x:Int):(Int => Int) = (y:Int) => x + y
 
     // returns a function that subtracts a given argument with a predefined amount
-    def minus(x:Int):(Int => Int) = ???
+    def minus(x:Int):(Int => Int) = (y:Int) => y - x
 
     // calls 'action' function with the given x argument and returns the result
-    def doIt(x:Int, action: (Int => Int)):Int = ???
+    def doIt(x:Int, action: (Int => Int)):Int = action(x)
 
     /** combines two functions that both take integer arguments by passing the result from
       * the first function as the argument to the second function, and returns its return value
       */
-    def combineInt(first: (Int => Int), second: (Int => Int)):(Int => Int) = ???
+    def combineInt(first: (Int => Int), second: (Int => Int)):(Int => Int) = (y:Int) => second(first(y))
 
     // combines two functions of generic types
-    def combine[A, B, C](first: (A => B), second: (B => C)):(A => C) = ???
+    def combine[A, B, C](first: (A => B), second: (B => C)):(A => C) = (x :A) => second(first(x))
 
     /** converts a two-argument integer-taking function to a single-argument function
       * where the argument is fixed with given 'param'
       */
-    def curry2int(fn: (Int, Int) => Int, param: Int): (Int => Int) = ???
+    def curry2int(fn: (Int, Int) => Int, param: Int): (Int => Int) = (y :Int) => fn(param, y)
 
-    /** 'curries' a two-argument generic function - i.e. translates the evaluation of a function 
+    /** 'curries' a two-argument generic function - i.e. translates the evaluation of a function
       * that takes two arguments into evaluating a sequence of functions, each with a single argument
       */
-    def curry2[A, B, C](fn: (A, B) => C): (A => (B => C)) = ???
+    def curry2[A, B, C](fn: (A, B) => C): (A => (B => C)) = (a :A) => (b :B) => fn(a,b)
 
-
-
-
+    def myMap[T, Y](list: List[T], fn:(T => Y)): List[Y] = {
+        def recur(current: List[T], mapped: List[Y]) : List[Y] = {
+            if(current.isEmpty) {
+                mapped.reverse
+            } else {
+                val head = current.head
+                recur(current.tail, fn(head) :: mapped)
+            }
+        }
+        recur(list, List())
+    }
 
     def main(args: Array[String]) {
-        
+
         println(s"${Console.GREEN}Running ${tests.size} tests:")
 
         tests.foreach { (fixture) =>
@@ -47,7 +55,6 @@ object HigherOrderFunctions {
                     println(Console.RED + e.getMessage)
                 }
             }
-
         }
     }
 
@@ -82,6 +89,13 @@ object HigherOrderFunctions {
         ("generic two-argument curry", () => {
             verify(5, curry2(plus)(2)(3))
             verify(17, curry2((x:Int, y:Int) => x + y * 5)(2)(3))
+        }),
+        ("myMap", () => {
+            verify(List(2,3,4), myMap(List(1,2,3), (x :Int) => x + 1))
+            verify(List(3,4,5), myMap(List(1,2,3), (x :Int) => x + 2))
+            verify(List(1,4,9), myMap(List(1,2,3), (x :Int) => x * x))
+            verify(List("aa","bb", "cc"), myMap(List("a", "b", "c"), (x :String) => x + x))
+            verify(List("1","2", "3"), myMap(List(1, 2, 3), (x :Int) => x.toString))
         })
     )
 
