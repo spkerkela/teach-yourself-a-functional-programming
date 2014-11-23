@@ -14,6 +14,7 @@ object ProjectEuler {
    */
 
   def problem2(): Int = {
+
     def fib(n:Int) :Int =  n match {
       case 0 | 1 => n
       case _ => fib(n-1) + fib(n-2)
@@ -43,25 +44,7 @@ object ProjectEuler {
   def problem4(): Int = {
     def isPalindrome(n :Int) :Boolean = {
       val numAsCharList = n.toString.toList
-      recursion(numAsCharList)
-    }
-
-    def dropHeads[A](list :List[A]) :List[A] = {
-      list.tail.dropRight(1)
-    }
-
-    // Looks nasty, I blame sucking at Scala, maybe pattern matching would work?
-    def recursion(list :List[Char]) :Boolean = {
-      if(list.isEmpty)
-        false
-      else if (list.length == 1)
-        true
-      else if(list.head == list.last && list.length == 2)
-        true
-      else if (list.head == list.last)
-        recursion(dropHeads(list))
-      else
-        false
+      numAsCharList == numAsCharList.reverse
     }
 
     // These two steps could be optimized but it runs in decent time already (< 1 second on my macbook pr0)
@@ -147,7 +130,7 @@ object ProjectEuler {
 
       // upperList:   01, 02, 03, 04
       // lowerList:     05, 06, 07
-      
+
       List.range(0, lowerList.length).map((i) => lowerList(i) + Math.max(upperList(i), upperList(i+1)))
     }
 
